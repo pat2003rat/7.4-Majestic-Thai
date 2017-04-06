@@ -19,15 +19,15 @@ var MenuContainer = React.createClass({displayName: "MenuContainer",
   componentWillMount: function(){
     var newEntreeCollection = this.state.entreeCollection;
     newEntreeCollection.add([
-      {orderitem: 'Fried WonTons | Keī́yw thxd', description: 'Deep fried wontons stuffed with ground chicken, served with homemade sweet and sour sauce.', price: 11.25},
-      {orderitem: 'Fried Chicken Dumplings | Keī́yw thxd kị̀', description: "Deep fried wonton skins stuffed with ground chicken and vegetables, served with homemade sweet and sour sauce. Chef Chanchai's Personal Favorite. Really makes you take a deep look at yourself and think, am I IN Thailand?", price: 9.95},
-      {orderitem: 'Thai Style Pork Jerky | Moo Dad Deaw', description: 'Deep fried marinated pork, served with homemade spicy sauce served with jasmine sweet and sour rice.', price: 12.95},
-      {orderitem: 'Salmon Love | Plā sælmxn rạk ', description: 'Grilled salmon served under chopped red onions, cilantro, bell peppers in our homemade tangy sauce. The flavors will be swimming in your mouth', price: 14.95},
-      {orderitem: 'Tempura | Thempura', description: 'Deep fried shrimp tempura and vegetables, served with homemade sweet and sour sauce. This is just like mom used to make back home. Flavors explode in your mouth', price: 9.95},
-      {orderitem: 'Issan Style Beef Jerky| S̄tịl̒ xīs̄ān neụ̄̂x kratuk', description: "Deep fried marinated beef, served with homemade spicy sauce. Chef Dusit's Personal Favorite", price: 14.95},
-      {orderitem: 'Garlic Prawns| Kratheīym kûng ', description: 'Deep fried prawns with shells (almost like potato chips), sautéed with our special garlic sauce, topped with ground black pepper. Once you pop, you cannot stop', price: 16.95},
-      {orderitem: 'Seafood Pad Ped| P̄hæ̀n pū thale ', description: "Combination seafood with homemade roasted curry paste, lemon grass, straw mushrooms, lime juice and mint leaves. Chef Gamon's Personal Favorite", price: 16.45},
-      {orderitem: 'Yellow Curry Noodle| Ǩwyteī̌yw kæng h̄elụ̄xng', description: 'Stir-fried wide rice noodles topped with ground beef, cooked in curry powder, tomatoes, bell peppers, onions and celery.', price: 16.95},
+      {item: 'Fried WonTons | Keī́yw thxd', description: 'Deep fried wontons stuffed with ground chicken, served with homemade sweet and sour sauce.', price: 11.25},
+      {item: 'Fried Chicken Dumplings | Keī́yw thxd kị̀', description: "Deep fried wonton skins stuffed with ground chicken and vegetables, served with homemade sweet and sour sauce. Chef Chanchai's Personal Favorite. Really makes you take a deep look at yourself and think, am I IN Thailand?", price: 9.95},
+      {item: 'Thai Style Pork Jerky | Moo Dad Deaw', description: 'Deep fried marinated pork, served with homemade spicy sauce served with jasmine sweet and sour rice.', price: 12.95},
+      {item: 'Salmon Love | Plā sælmxn rạk ', description: 'Grilled salmon served under chopped red onions, cilantro, bell peppers in our homemade tangy sauce. The flavors will be swimming in your mouth', price: 14.95},
+      {item: 'Tempura | Thempura', description: 'Deep fried shrimp tempura and vegetables, served with homemade sweet and sour sauce. This is just like mom used to make back home. Flavors explode in your mouth', price: 9.95},
+      {item: 'Issan Style Beef Jerky| S̄tịl̒ xīs̄ān neụ̄̂x kratuk', description: "Deep fried marinated beef, served with homemade spicy sauce. Chef Dusit's Personal Favorite", price: 14.95},
+      {item: 'Garlic Prawns| Kratheīym kûng ', description: 'Deep fried prawns with shells (almost like potato chips), sautéed with our special garlic sauce, topped with ground black pepper. Once you pop, you cannot stop', price: 16.95},
+      {item: 'Seafood Pad Ped| P̄hæ̀n pū thale ', description: "Combination seafood with homemade roasted curry paste, lemon grass, straw mushrooms, lime juice and mint leaves. Chef Gamon's Personal Favorite", price: 16.45},
+      {item: 'Yellow Curry Noodle| Ǩwyteī̌yw kæng h̄elụ̄xng', description: 'Stir-fried wide rice noodles topped with ground beef, cooked in curry powder, tomatoes, bell peppers, onions and celery.', price: 16.95},
     ]);
     this.setState({itemCollection: newEntreeCollection});
   },
@@ -87,7 +87,7 @@ var MenuContainer = React.createClass({displayName: "MenuContainer",
 
         ), 
         React.createElement("div", {className: "col-md-12 userstories text-center"}, 
-        React.createElement("h1", {className: "cookscolornametitle"}, " About our Cooks"), 
+        React.createElement("h1", {className: ""}, "About our Cooks"), 
         React.createElement("div", {className: "col-xs-12 col-md-4 "}, 
           React.createElement("div", {className: "well backgroundusercolor"}, 
             React.createElement("h2", null, "Sarawut May"), React.createElement("img", {src: "./images/thaicook1.jpeg"}), 
@@ -155,7 +155,7 @@ var EntreeListings = React.createClass({displayName: "EntreeListings",
       return (
         React.createElement("div", {key: entreeProps.cid}, 
           React.createElement("div", {className: "well"}, 
-            React.createElement("span", {className: "listingitems"}, " ", entreeProps.get('orderitem'), " "), 
+            React.createElement("span", {className: "listingitems"}, " ", entreeProps.get('item'), " "), 
                 React.createElement("li", {className: "menulistingprice"}, " Price ", entreeProps.get('price')), 
                 React.createElement("br", null), 
           React.createElement("p", {className: "menuitemdescription"}, entreeProps.get('description')), 
@@ -181,8 +181,8 @@ var OrderForm = React.createClass({displayName: "OrderForm",
 
     var subTotal = this.props.orderCollection.subTotal();
 
-    var orderitems = this.props.orderCollection.map(function(order){
-      var name = orderitem.get('orderitem');
+    var orderitems = this.props.orderCollection.map(function(orderitem){
+      var name = orderitem.get('item');
       var price = orderitem.get('price');
 
       return {
@@ -202,7 +202,7 @@ var OrderForm = React.createClass({displayName: "OrderForm",
 
       return (
         React.createElement("li", {className: "itemmenulistedprice", key: orderItem.cid}, 
-          React.createElement("span", null, orderItem.get('orderitem')), 
+          React.createElement("span", null, orderItem.get('item')), 
           React.createElement("span", {className: "order-item-price"}, "$", orderItem.get('price'), " ")
         )
       )
