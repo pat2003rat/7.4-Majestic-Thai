@@ -30,8 +30,13 @@ var MenuContainer = React.createClass({
     this.setState({itemCollection: newEntreeCollection});
   },
   addOrderItem: function(entreeProps){
-    this.state.orderCollection.add(entreeProps.toJSON());
-    this.forceUpdate();
+    // this.state.orderCollection.add(entreeProps.toJSON());
+    var orderCollection = this.state.orderCollection;
+    orderCollection.add(entreeProps.toJSON());
+
+    // try to avoid all uses of this.forceUpdate();
+    // setState is the primary method you use to trigger UI updates
+    this.setState({ orderCollection });
   },
 
   render: function(){
@@ -56,31 +61,31 @@ var MenuContainer = React.createClass({
           </div>
           <h1 className="entreecolortitle text-center">Pictures of Entrees</h1>
           <div className="well foodimage col-md-6 text-center">
-            <p className ="colorfoodtitle"> Fried Wontons </p> <img className ="image" src="./images/friedwontons.jpg"></img>
+            <p className ="colorfoodtitle"> Fried Wontons </p> <img className ="image" src="./images/friedwontons.jpg" />
           </div>
           <div className="well foodimage col-md-6 text-center">
-            <p className ="colorfoodtitle"> Fried Chicken Dumplings </p> <img className ="image" src="./images/Fried Chicken Dumplings.jpg"> </img>
+            <p className ="colorfoodtitle"> Fried Chicken Dumplings </p> <img className ="image" src="./images/Fried Chicken Dumplings.jpg" />
           </div>
           <div className="well foodimage col-md-6 text-center">
-            <p className ="colorfoodtitle"> Thai Style Pork Jerky </p> <img className ="image" src="./images/Thai Style Pork Jerky.jpg"> </img>
+            <p className ="colorfoodtitle"> Thai Style Pork Jerky </p> <img className ="image" src="./images/Thai Style Pork Jerky.jpg" />
           </div>
           <div className="well foodimage col-md-6 text-center">
-            <p className ="colorfoodtitle"> Grilled Salmon </p> <img className ="image" src="./images/Grilled salmon.jpg"> </img>
+            <p className ="colorfoodtitle"> Grilled Salmon </p> <img className ="image" src="./images/Grilled salmon.jpg" />
           </div>
           <div className="well foodimage col-md-6 text-center">
-            <p className ="colorfoodtitle"> Tempura</p> <img className ="image" src="./images/Tempura.jpg"> </img>
+            <p className ="colorfoodtitle"> Tempura</p> <img className ="image" src="./images/Tempura.jpg" />
           </div>
           <div className="well foodimage col-md-6 text-center">
-            <p className ="colorfoodtitle"> Issan Style Beef Jerky</p> <img className ="image" src="./images/Issan Style Beef Jerky.jpg"> </img>
+            <p className ="colorfoodtitle"> Issan Style Beef Jerky</p> <img className ="image" src="./images/Issan Style Beef Jerky.jpg" />
           </div>
           <div className="well foodimage col-md-6 text-center">
-            <p className ="colorfoodtitle"> Garlic Prawns </p> <img className ="image" src="./images/Garlic Prawns.jpg"> </img>
+            <p className ="colorfoodtitle"> Garlic Prawns </p> <img className ="image" src="./images/Garlic Prawns.jpg" />
           </div>
           <div className="well foodimage col-md-6 text-center">
-            <p className ="colorfoodtitle"> Seafood Pad Ped </p> <img className ="image" src="./images/Seafood Pad Ped.jpg"> </img>
+            <p className ="colorfoodtitle"> Seafood Pad Ped </p> <img className ="image" src="./images/Seafood Pad Ped.jpg" />
           </div>
           <div className="well foodimage col-md-6 text-center">
-            <p className ="colorfoodtitle"> Yellow Curry Noodle </p> <img className ="image" src="./images/Yellow Curry Noodle.jpg"> </img>
+            <p className ="colorfoodtitle"> Yellow Curry Noodle </p> <img className ="image" src="./images/Yellow Curry Noodle.jpg" />
           </div>
 
         </div>
@@ -178,8 +183,9 @@ var OrderForm = React.createClass({
   placeOrder: function(){
 
     var subTotal = this.props.orderCollection.subTotal();
+    var orderCollection = this.props.orderCollection;
 
-    var orderitems = this.props.orderCollection.map(function(orderitem){
+    var orderitems = orderCollection.map(function(orderitem){
       var name = orderitem.get('item');
       var price = orderitem.get('price');
 
@@ -189,8 +195,9 @@ var OrderForm = React.createClass({
       }
     });
 
-    this.props.orderCollection.create({username:'Client', orderitems: orderitems, subTotal: subTotal,})
-    this.props.orderCollection.reset();
+
+    orderCollection.create({ username:'Client', orderitems: orderitems, subTotal: subTotal });
+    orderCollection.reset();
     this.forceUpdate();
   },
 
