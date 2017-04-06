@@ -32,8 +32,13 @@ var MenuContainer = React.createClass({displayName: "MenuContainer",
     this.setState({itemCollection: newEntreeCollection});
   },
   addOrderItem: function(entreeProps){
-    this.state.orderCollection.add(entreeProps.toJSON());
-    this.forceUpdate();
+    // this.state.orderCollection.add(entreeProps.toJSON());
+    var orderCollection = this.state.orderCollection;
+    orderCollection.add(entreeProps.toJSON());
+
+    // try to avoid all uses of this.forceUpdate();
+    // setState is the primary method you use to trigger UI updates
+    this.setState({ orderCollection });
   },
 
   render: function(){
@@ -61,28 +66,28 @@ var MenuContainer = React.createClass({displayName: "MenuContainer",
             React.createElement("p", {className: "colorfoodtitle"}, " Fried Wontons "), " ", React.createElement("img", {className: "image", src: "./images/friedwontons.jpg"})
           ), 
           React.createElement("div", {className: "well foodimage col-md-6 text-center"}, 
-            React.createElement("p", {className: "colorfoodtitle"}, " Fried Chicken Dumplings "), " ", React.createElement("img", {className: "image", src: "./images/Fried Chicken Dumplings.jpg"}, " ")
+            React.createElement("p", {className: "colorfoodtitle"}, " Fried Chicken Dumplings "), " ", React.createElement("img", {className: "image", src: "./images/Fried Chicken Dumplings.jpg"})
           ), 
           React.createElement("div", {className: "well foodimage col-md-6 text-center"}, 
-            React.createElement("p", {className: "colorfoodtitle"}, " Thai Style Pork Jerky "), " ", React.createElement("img", {className: "image", src: "./images/Thai Style Pork Jerky.jpg"}, " ")
+            React.createElement("p", {className: "colorfoodtitle"}, " Thai Style Pork Jerky "), " ", React.createElement("img", {className: "image", src: "./images/Thai Style Pork Jerky.jpg"})
           ), 
           React.createElement("div", {className: "well foodimage col-md-6 text-center"}, 
-            React.createElement("p", {className: "colorfoodtitle"}, " Grilled Salmon "), " ", React.createElement("img", {className: "image", src: "./images/Grilled salmon.jpg"}, " ")
+            React.createElement("p", {className: "colorfoodtitle"}, " Grilled Salmon "), " ", React.createElement("img", {className: "image", src: "./images/Grilled salmon.jpg"})
           ), 
           React.createElement("div", {className: "well foodimage col-md-6 text-center"}, 
-            React.createElement("p", {className: "colorfoodtitle"}, " Tempura"), " ", React.createElement("img", {className: "image", src: "./images/Tempura.jpg"}, " ")
+            React.createElement("p", {className: "colorfoodtitle"}, " Tempura"), " ", React.createElement("img", {className: "image", src: "./images/Tempura.jpg"})
           ), 
           React.createElement("div", {className: "well foodimage col-md-6 text-center"}, 
-            React.createElement("p", {className: "colorfoodtitle"}, " Issan Style Beef Jerky"), " ", React.createElement("img", {className: "image", src: "./images/Issan Style Beef Jerky.jpg"}, " ")
+            React.createElement("p", {className: "colorfoodtitle"}, " Issan Style Beef Jerky"), " ", React.createElement("img", {className: "image", src: "./images/Issan Style Beef Jerky.jpg"})
           ), 
           React.createElement("div", {className: "well foodimage col-md-6 text-center"}, 
-            React.createElement("p", {className: "colorfoodtitle"}, " Garlic Prawns "), " ", React.createElement("img", {className: "image", src: "./images/Garlic Prawns.jpg"}, " ")
+            React.createElement("p", {className: "colorfoodtitle"}, " Garlic Prawns "), " ", React.createElement("img", {className: "image", src: "./images/Garlic Prawns.jpg"})
           ), 
           React.createElement("div", {className: "well foodimage col-md-6 text-center"}, 
-            React.createElement("p", {className: "colorfoodtitle"}, " Seafood Pad Ped "), " ", React.createElement("img", {className: "image", src: "./images/Seafood Pad Ped.jpg"}, " ")
+            React.createElement("p", {className: "colorfoodtitle"}, " Seafood Pad Ped "), " ", React.createElement("img", {className: "image", src: "./images/Seafood Pad Ped.jpg"})
           ), 
           React.createElement("div", {className: "well foodimage col-md-6 text-center"}, 
-            React.createElement("p", {className: "colorfoodtitle"}, " Yellow Curry Noodle "), " ", React.createElement("img", {className: "image", src: "./images/Yellow Curry Noodle.jpg"}, " ")
+            React.createElement("p", {className: "colorfoodtitle"}, " Yellow Curry Noodle "), " ", React.createElement("img", {className: "image", src: "./images/Yellow Curry Noodle.jpg"})
           )
 
         ), 
@@ -180,8 +185,9 @@ var OrderForm = React.createClass({displayName: "OrderForm",
   placeOrder: function(){
 
     var subTotal = this.props.orderCollection.subTotal();
+    var orderCollection = this.props.orderCollection;
 
-    var orderitems = this.props.orderCollection.map(function(orderitem){
+    var orderitems = orderCollection.map(function(orderitem){
       var name = orderitem.get('item');
       var price = orderitem.get('price');
 
@@ -191,8 +197,9 @@ var OrderForm = React.createClass({displayName: "OrderForm",
       }
     });
 
-    this.props.orderCollection.create({username:'Client', orderitems: orderitems, subTotal: subTotal,})
-    this.props.orderCollection.reset();
+
+    orderCollection.create({ username:'Client', orderitems: orderitems, subTotal: subTotal });
+    orderCollection.reset();
     this.forceUpdate();
   },
 
@@ -272,7 +279,7 @@ module.exports = {
 
 },{"backbone":5}],4:[function(require,module,exports){
 "use strict";
-
+var $ = require('jquery');
 var Backbone = require('backbone');
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -298,7 +305,7 @@ module.exports = {
   appRouter
 };
 
-},{"./components/index.jsx":1,"backbone":5,"react":164,"react-dom":35}],5:[function(require,module,exports){
+},{"./components/index.jsx":1,"backbone":5,"jquery":33,"react":164,"react-dom":35}],5:[function(require,module,exports){
 (function (global){
 //     Backbone.js 1.3.3
 
