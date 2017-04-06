@@ -5767,7 +5767,8 @@ img {
   max-width: 100%; }
 
 body {
-  background: url("../images/Beach.jpg"); }
+  background: url("../images/Beach.jpg");
+  background-repeat: repeat-y; }
 
 #add-to-order-btn {
   background-color: #91b3ab; }
@@ -5821,6 +5822,9 @@ body {
   color: white;
   font-size: 25px;
   font-weight: bolder; }
+
+.cookscolornametitle {
+  color: white; }
 
 .well {
   opacity: 0.9;

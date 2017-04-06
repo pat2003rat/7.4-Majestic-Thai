@@ -87,7 +87,7 @@ var MenuContainer = React.createClass({displayName: "MenuContainer",
 
         ), 
         React.createElement("div", {className: "col-md-12 userstories text-center"}, 
-        React.createElement("h1", null, "About our Cooks"), 
+        React.createElement("h1", {className: "cookscolornametitle"}, " About our Cooks"), 
         React.createElement("div", {className: "col-xs-12 col-md-4 "}, 
           React.createElement("div", {className: "well backgroundusercolor"}, 
             React.createElement("h2", null, "Sarawut May"), React.createElement("img", {src: "./images/thaicook1.jpeg"}), 
