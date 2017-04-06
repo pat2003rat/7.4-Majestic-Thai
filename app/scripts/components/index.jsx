@@ -131,7 +131,7 @@ var EntreeListings = React.createClass({
           <div className="well">
             <span className="listingitems"> {entreeProps.get('orderitem')} </span>
               <ul className="priceofitems">
-                <li className="menulistingprice"> Price {entreeProps.get('price')}</li>
+                <li className="menulistingprice"> Price{entreeProps.get('price')}</li>
                 <br></br>
                 <button type="button" id="orderbtn" className="btn btn-warning btn-xs" onClick={() => {self.props.addOrderItem(entreeProps)}}>Add to Cart</button>
               </ul>
@@ -159,7 +159,7 @@ var EntreeListings = React.createClass({
         <div key={entreeProps.cid}>
           <div className="well">
             <span className="listingitems"> {entreeProps.get('item')} </span>
-                <li className="menulistingprice"> Price {entreeProps.get('price')}</li>
+                <li className="menulistingprice"> Price ${entreeProps.get('price')}</li>
                 <br></br>
           <p className="menuitemdescription">{entreeProps.get('description')}</p>
             <button type="button" id="orderbtn" className="btn btn-danger btn-xs" onClick={() => {self.props.addOrderItem(entreeProps)}}>Add to Cart</button>
