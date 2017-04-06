@@ -85,7 +85,7 @@ var MenuContainer = React.createClass({
 
         </div>
         <div className ="col-md-12 userstories text-center">
-        <h1>About our Cooks</h1>
+        <h1 className = "cookscolornametitle"> About our Cooks</h1>
         <div className="col-xs-12 col-md-4 ">
           <div className = "well backgroundusercolor" >
             <h2>Sarawut May</h2><img src="./images/thaicook1.jpeg" ></img>

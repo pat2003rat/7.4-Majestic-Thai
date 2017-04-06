@@ -18,6 +18,8 @@ img {
 
 body {
   background: url('../images/Beach.jpg');
+  background-repeat: repeat-y;
+
 }
 
 
@@ -86,6 +88,10 @@ list-style-type: none;
   color: white;
   font-size: 25px;
   font-weight: bolder;
+}
+
+.cookscolornametitle {
+  color: white;
 }
 
 .well{
