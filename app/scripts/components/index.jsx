@@ -3,7 +3,7 @@ var Backbone = require('backbone');
 
 var OrderCollection = require('../models/models').OrderCollection;
 var EntreeCollection = require('../models/models').EntreeCollection;
-
+// MenuContainer is the FoodListView
 var MenuContainer = React.createClass({
 
   getInitialState: function(){
@@ -27,7 +27,8 @@ var MenuContainer = React.createClass({
       {item: 'Seafood Pad Ped| P̄hæ̀n pū thale ', description: "Combination seafood with homemade roasted curry paste, lemon grass, straw mushrooms, lime juice and mint leaves. Chef Gamon's Personal Favorite", price: 16.45},
       {item: 'Yellow Curry Noodle| Ǩwyteī̌yw kæng h̄elụ̄xng', description: 'Stir-fried wide rice noodles topped with ground beef, cooked in curry powder, tomatoes, bell peppers, onions and celery.', price: 16.95},
     ]);
-    this.setState({itemCollection: newEntreeCollection});
+    this.setState({ itemCollection: newEntreeCollection });
+    console.log('static menu items', newEntreeCollection);
   },
   addOrderItem: function(entreeProps){
     // this.state.orderCollection.add(entreeProps.toJSON());
@@ -123,34 +124,9 @@ var MenuContainer = React.createClass({
 
 var EntreeListings = React.createClass({
 
-  render: function(){
-    var self = this;
-    var entreeListings = this.props.entreeCollection.map(function(entreeProps){
-      return (
-        <div key={entreeProps.cid}>
-          <div className="well">
-            <span className="listingitems"> {entreeProps.get('orderitem')} </span>
-              <ul className="priceofitems">
-                <li className="menulistingprice"> Price{entreeProps.get('price')}</li>
-                <br></br>
-                <button type="button" id="orderbtn" className="btn btn-warning btn-xs" onClick={() => {self.props.addOrderItem(entreeProps)}}>Add to Cart</button>
-              </ul>
-          <p className="menuitemdescription">{entreeProps.get('description')}</p>
-        </div>
-
-      </div>
-      );
-    });
-
-    return (
-      <div>
-        {entreeListings}
-      </div>
-    );
-  }
-});
-
-var EntreeListings = React.createClass({
+  handlePriceClick: function(entreeProps) {
+    console.log('food model', entreeProps);
+  },
 
   render: function(){
     var self = this;
@@ -159,7 +135,7 @@ var EntreeListings = React.createClass({
         <div key={entreeProps.cid}>
           <div className="well">
             <span className="listingitems"> {entreeProps.get('item')} </span>
-                <li className="menulistingprice"> Price ${entreeProps.get('price')}</li>
+                <li className="menulistingprice" onClick={() => self.handlePriceClick(entreeProps)}> Price ${entreeProps.get('price')}</li>
                 <br></br>
           <p className="menuitemdescription">{entreeProps.get('description')}</p>
             <button type="button" id="orderbtn" className="btn btn-danger btn-xs" onClick={() => {self.props.addOrderItem(entreeProps)}}>Add to Cart</button>
@@ -220,6 +196,7 @@ var OrderForm = React.createClass({
           <ul className="entree-item-price">{orderItems}</ul>
           <p className="totalamount"> Total Due: ${subTotal} </p>
         <button onClick={this.placeOrder}type="submit" id="placeorder" className="btn btn-danger btn-sm">Place Order </button>
+
       </div>
       </div>
     );
