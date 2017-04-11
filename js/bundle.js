@@ -5,7 +5,7 @@ var Backbone = require('backbone');
 
 var OrderCollection = require('../models/models').OrderCollection;
 var EntreeCollection = require('../models/models').EntreeCollection;
-
+// MenuContainer is the FoodListView
 var MenuContainer = React.createClass({displayName: "MenuContainer",
 
   getInitialState: function(){
@@ -27,14 +27,22 @@ var MenuContainer = React.createClass({displayName: "MenuContainer",
       {item: 'Issan Style Beef Jerky| S̄tịl̒ xīs̄ān neụ̄̂x kratuk', description: "Deep fried marinated beef, served with homemade spicy sauce. Chef Dusit's Personal Favorite", price: 14.95},
       {item: 'Garlic Prawns| Kratheīym kûng ', description: 'Deep fried prawns with shells (almost like potato chips), sautéed with our special garlic sauce, topped with ground black pepper. Once you pop, you cannot stop', price: 16.95},
       {item: 'Seafood Pad Ped| P̄hæ̀n pū thale ', description: "Combination seafood with homemade roasted curry paste, lemon grass, straw mushrooms, lime juice and mint leaves. Chef Gamon's Personal Favorite", price: 16.45},
-      {item: 'Yellow Curry Noodle| Ǩwyteī̌yw kæng h̄elụ̄xng', description: 'Stir-fried wide rice noodles topped with ground beef, cooked in curry powder, tomatoes, bell peppers, onions and celery.', price: 16.95},
+      {item: 'Yellow Curry Noodle| Ǩwyteī̌yw kæng h̄elụ̄xng', description: 'Stir-fried wide rice noodles topped with ground beef, cooked in curry powder, tomatoes, bell peppers and celery.', price: 16.95},
     ]);
-    this.setState({itemCollection: newEntreeCollection});
+    this.setState({ itemCollection: newEntreeCollection });
+    console.log('static menu items', newEntreeCollection);
   },
   addOrderItem: function(entreeProps){
-    // this.state.orderCollection.add(entreeProps.toJSON());
+    var orderItem = entreeProps.clone();
+    orderItem.unset('description');
+    console.log('item added to order', orderItem);
+    // this.state.orderCollection.add(entreeProps);
     var orderCollection = this.state.orderCollection;
-    orderCollection.add(entreeProps.toJSON());
+    orderCollection.add(orderItem);
+
+    // toJSON returns a shallow copy of the attributes hash
+    // console.log('toJSON', entreeProps.toJSON());
+    // console.log('model', entreeProps);
 
     // try to avoid all uses of this.forceUpdate();
     // setState is the primary method you use to trigger UI updates
@@ -125,34 +133,9 @@ var MenuContainer = React.createClass({displayName: "MenuContainer",
 
 var EntreeListings = React.createClass({displayName: "EntreeListings",
 
-  render: function(){
-    var self = this;
-    var entreeListings = this.props.entreeCollection.map(function(entreeProps){
-      return (
-        React.createElement("div", {key: entreeProps.cid}, 
-          React.createElement("div", {className: "well"}, 
-            React.createElement("span", {className: "listingitems"}, " ", entreeProps.get('orderitem'), " "), 
-              React.createElement("ul", {className: "priceofitems"}, 
-                React.createElement("li", {className: "menulistingprice"}, " Price", entreeProps.get('price')), 
-                React.createElement("br", null), 
-                React.createElement("button", {type: "button", id: "orderbtn", className: "btn btn-warning btn-xs", onClick: () => {self.props.addOrderItem(entreeProps)}}, "Add to Cart")
-              ), 
-          React.createElement("p", {className: "menuitemdescription"}, entreeProps.get('description'))
-        )
-
-      )
-      );
-    });
-
-    return (
-      React.createElement("div", null, 
-        entreeListings
-      )
-    );
-  }
-});
-
-var EntreeListings = React.createClass({displayName: "EntreeListings",
+  handlePriceClick: function(entreeProps) {
+    console.log('food model', entreeProps);
+  },
 
   render: function(){
     var self = this;
@@ -161,7 +144,7 @@ var EntreeListings = React.createClass({displayName: "EntreeListings",
         React.createElement("div", {key: entreeProps.cid}, 
           React.createElement("div", {className: "well"}, 
             React.createElement("span", {className: "listingitems"}, " ", entreeProps.get('item'), " "), 
-                React.createElement("li", {className: "menulistingprice"}, " Price $", entreeProps.get('price')), 
+                React.createElement("li", {className: "menulistingprice", onClick: () => self.handlePriceClick(entreeProps)}, " Price $", entreeProps.get('price')), 
                 React.createElement("br", null), 
           React.createElement("p", {className: "menuitemdescription"}, entreeProps.get('description')), 
             React.createElement("button", {type: "button", id: "orderbtn", className: "btn btn-danger btn-xs", onClick: () => {self.props.addOrderItem(entreeProps)}}, "Add to Cart")
@@ -187,30 +170,25 @@ var OrderForm = React.createClass({displayName: "OrderForm",
     var subTotal = this.props.orderCollection.subTotal();
     var orderCollection = this.props.orderCollection;
 
-    var orderitems = orderCollection.map(function(orderitem){
-      var name = orderitem.get('item');
-      var price = orderitem.get('price');
-
-      return {
-        name,
-        price
-      }
-    });
-
-
-    orderCollection.create({ username:'Client', orderitems: orderitems, subTotal: subTotal });
+    orderCollection.create({ username:'Client', orderitems: orderCollection.toJSON(), subTotal: subTotal });
     orderCollection.reset();
     this.forceUpdate();
   },
 
+  handlePriceClick: function(orderItem) {
+    orderItem.unset('description');
+    console.log('orderItem', orderItem);
+  },
+
   render: function(){
+    var self = this;
     var subTotal = this.props.orderCollection.subTotal();
     var orderItems = this.props.orderCollection.map(function(orderItem){
 
       return (
         React.createElement("li", {className: "itemmenulistedprice", key: orderItem.cid}, 
           React.createElement("span", null, orderItem.get('item')), 
-          React.createElement("span", {className: "order-item-price"}, "$", orderItem.get('price'), " ")
+          React.createElement("span", {className: "order-item-price", onClick: ()=>self.handlePriceClick(orderItem)}, "$", orderItem.get('price'), " ")
         )
       )
     });
@@ -222,6 +200,7 @@ var OrderForm = React.createClass({displayName: "OrderForm",
           React.createElement("ul", {className: "entree-item-price"}, orderItems), 
           React.createElement("p", {className: "totalamount"}, " Total Due: $", subTotal, " "), 
         React.createElement("button", {onClick: this.placeOrder, type: "submit", id: "placeorder", className: "btn btn-danger btn-sm"}, "Place Order ")
+
       )
       )
     );
@@ -249,13 +228,14 @@ $(function(){
 "use strict";
 var Backbone = require('backbone');
 
+// Entree is Order model
 var Entree = Backbone.Model.extend({
   idAttribute: '_id',
 });
 
 var EntreeCollection = Backbone.Collection.extend({
   model: Entree,
-  url: 'https://tiny-lasagna-server.herokuapp.com/collections/prat'
+  url: 'https://tiny-lasagna-server.herokuapp.com/collections/pratorder'
 });
 
 var OrderCollection = Backbone.Collection.extend({
