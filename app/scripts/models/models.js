@@ -1,12 +1,13 @@
 var Backbone = require('backbone');
 
+// Entree is Order model
 var Entree = Backbone.Model.extend({
   idAttribute: '_id',
 });
 
 var EntreeCollection = Backbone.Collection.extend({
   model: Entree,
-  url: 'https://tiny-lasagna-server.herokuapp.com/collections/prat'
+  url: 'https://tiny-lasagna-server.herokuapp.com/collections/pratorder'
 });
 
 var OrderCollection = Backbone.Collection.extend({

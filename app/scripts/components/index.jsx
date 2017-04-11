@@ -25,15 +25,22 @@ var MenuContainer = React.createClass({
       {item: 'Issan Style Beef Jerky| S̄tịl̒ xīs̄ān neụ̄̂x kratuk', description: "Deep fried marinated beef, served with homemade spicy sauce. Chef Dusit's Personal Favorite", price: 14.95},
       {item: 'Garlic Prawns| Kratheīym kûng ', description: 'Deep fried prawns with shells (almost like potato chips), sautéed with our special garlic sauce, topped with ground black pepper. Once you pop, you cannot stop', price: 16.95},
       {item: 'Seafood Pad Ped| P̄hæ̀n pū thale ', description: "Combination seafood with homemade roasted curry paste, lemon grass, straw mushrooms, lime juice and mint leaves. Chef Gamon's Personal Favorite", price: 16.45},
-      {item: 'Yellow Curry Noodle| Ǩwyteī̌yw kæng h̄elụ̄xng', description: 'Stir-fried wide rice noodles topped with ground beef, cooked in curry powder, tomatoes, bell peppers, onions and celery.', price: 16.95},
+      {item: 'Yellow Curry Noodle| Ǩwyteī̌yw kæng h̄elụ̄xng', description: 'Stir-fried wide rice noodles topped with ground beef, cooked in curry powder, tomatoes, bell peppers and celery.', price: 16.95},
     ]);
     this.setState({ itemCollection: newEntreeCollection });
     console.log('static menu items', newEntreeCollection);
   },
   addOrderItem: function(entreeProps){
-    // this.state.orderCollection.add(entreeProps.toJSON());
+    var orderItem = entreeProps.clone();
+    orderItem.unset('description');
+    console.log('item added to order', orderItem);
+    // this.state.orderCollection.add(entreeProps);
     var orderCollection = this.state.orderCollection;
-    orderCollection.add(entreeProps.toJSON());
+    orderCollection.add(orderItem);
+
+    // toJSON returns a shallow copy of the attributes hash
+    // console.log('toJSON', entreeProps.toJSON());
+    // console.log('model', entreeProps);
 
     // try to avoid all uses of this.forceUpdate();
     // setState is the primary method you use to trigger UI updates
@@ -161,30 +168,25 @@ var OrderForm = React.createClass({
     var subTotal = this.props.orderCollection.subTotal();
     var orderCollection = this.props.orderCollection;
 
-    var orderitems = orderCollection.map(function(orderitem){
-      var name = orderitem.get('item');
-      var price = orderitem.get('price');
-
-      return {
-        name,
-        price
-      }
-    });
-
-
-    orderCollection.create({ username:'Client', orderitems: orderitems, subTotal: subTotal });
+    orderCollection.create({ username:'Client', orderitems: orderCollection.toJSON(), subTotal: subTotal });
     orderCollection.reset();
     this.forceUpdate();
   },
 
+  handlePriceClick: function(orderItem) {
+    orderItem.unset('description');
+    console.log('orderItem', orderItem);
+  },
+
   render: function(){
+    var self = this;
     var subTotal = this.props.orderCollection.subTotal();
     var orderItems = this.props.orderCollection.map(function(orderItem){
 
       return (
         <li className="itemmenulistedprice" key={orderItem.cid}>
           <span>{orderItem.get('item')}</span>
-          <span className="order-item-price">${orderItem.get('price')} </span>
+          <span className="order-item-price" onClick={()=>self.handlePriceClick(orderItem)}>${orderItem.get('price')} </span>
         </li>
       )
     });
